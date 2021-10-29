@@ -70,6 +70,30 @@ def get_cliente(id):
     conn.commit()
     return jsonify(mobile_records),200
 
+@app.route('/cliente/<id>', methods=['PATCH'])
+def update_cliente(id):
+    my_params = request.form
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cur = conn.cursor()
+    cur.execute("UPDATE clientes SET cliente_nome = %s WHERE cliente_id=%s ",(my_params.get("novo_nome"), id))
+    cur.close()
+    # commit the changes
+    conn.commit()
+    return "Cliente Alterado Com Sucesso!", 200
+
+@app.route('/cliente/<id>', methods=['DELETE'])
+def delete_cliente(id):
+    my_params = request.form
+    conn = psycopg2.connect(os.environ['DATABASE_URL'])
+    cur = conn.cursor()
+    cur.execute("DELETE FROM clientes WHERE cliente_id=%s ",(id))
+    cur.close()
+    # commit the changes
+    conn.commit()
+    return "Cliente Deletado Com Sucesso!", 200
+
+
+
 
 
 if __name__ == "__main__":
